@@ -1,8 +1,9 @@
 import time
 import asyncio
 from pyrogram import filters
-from pyrogram.enums import ChatType
-from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
+from pyrogram.enums import ChatType, ChatMemberStatus, ParseMode
+from pyrogram.errors import UserNotParticipant
+from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message, CallbackQuery
 from youtubesearchpython.__future__ import VideosSearch
 
 import config
@@ -22,6 +23,7 @@ from maythusharmusic.utils.formatters import get_readable_time
 from maythusharmusic.utils.inline import help_pannel, private_panel, start_panel
 from config import BANNED_USERS
 from strings import get_string
+
 
 @app.on_message(filters.command(["start"]) & filters.private & ~BANNED_USERS)
 @LanguageStart
@@ -84,29 +86,28 @@ async def start_pm(client, message: Message, _):
                     text=f"{message.from_user.mention} ᴊᴜsᴛ sᴛᴀʀᴛᴇᴅ ᴛʜᴇ ʙᴏᴛ ᴛᴏ ᴄʜᴇᴄᴋ <b>ᴛʀᴀᴄᴋ ɪɴғᴏʀᴍᴀᴛɪᴏɴ</b>.\n\n<b>ᴜsᴇʀ ɪᴅ :</b> <code>{message.from_user.id}</code>\n<b>ᴜsᴇʀɴᴀᴍᴇ :</b> @{message.from_user.username}",
                 )
     else:
-
         try:
             out = private_panel(_)
             lol = await message.reply_text("**ω ᥫ᭡**")
-            await asyncio.sleep(0.5)
+            await asyncio.sleep(0.1)
             await lol.edit_text("**ωє ᥫ᭡**")
-            await asyncio.sleep(0.5)
+            await asyncio.sleep(0.1)
             await lol.edit_text("**ωєℓ ᥫ᭡**")
-            await asyncio.sleep(0.5)
+            await asyncio.sleep(0.1)
             await lol.edit_text("**ωєℓᴄ ᥫ᭡**")
-            await asyncio.sleep(0.5)
+            await asyncio.sleep(0.1)
             await lol.edit_text("**ωєℓᴄᴏᴍ ᥫ᭡**")
-            await asyncio.sleep(0.5)
+            await asyncio.sleep(0.1)
             await lol.edit_text("**ωєℓᴄᴏᴍᴇ ᥫ᭡**")
-            await asyncio.sleep(0.5)
+            await asyncio.sleep(0.1)
             await lol.edit_text("**ωєℓᴄᴏᴍᴇ в ᥫ᭡**")
-            await asyncio.sleep(0.5)
+            await asyncio.sleep(0.1)
             await lol.edit_text("**ωєℓᴄᴏᴍᴇ вα ᥫ᭡**")
-            await asyncio.sleep(0.5)
+            await asyncio.sleep(0.1)
             await lol.edit_text("**ωєℓᴄᴏᴍᴇ вαв ᥫ᭡**")
-            await asyncio.sleep(0.5)
+            await asyncio.sleep(0.1)
             await lol.edit_text("**ωєℓᴄᴏᴍᴇ вαву ᥫ᭡**")
-               
+          
             await lol.delete()
             lols = await message.reply_text("**⚡️ѕ**")
             await asyncio.sleep(0.1)
@@ -125,32 +126,54 @@ async def start_pm(client, message: Message, _):
             await lols.edit_text("**⚡ѕтαятιиg**")
             await asyncio.sleep(0.1)
             await lols.edit_text("**⚡ѕтαятιиg.**")
-
             await lols.edit_text("**⚡ѕтαятιиg....**")
-
-            await lols.edit_text("**⚡ѕтαятιиg.**")
-            await lols.edit_text("**⚡ѕтαятιиg....**")
-            m = await message.reply_sticker("CAACAgUAAxkBAAEP1iZpIbqC1oXAVuwP0n3b9oNnnHRlvQAC0g4AAqVyqVcL00FzQjR1ZjYE")
-            if message.chat.photo:
-
-                userss_photo = await app.download_media(
-                    message.chat.photo.big_file_id,
-                )
-            else:
-                userss_photo = "assets/nodp.png"
-            if userss_photo:
-                chat_photo = userss_photo
-            chat_photo = userss_photo if userss_photo else START_IMG_URL
-
-        except AttributeError:
-            chat_photo = "assets/nodp.png"
+            
+            m = await message.reply_sticker("CAACAgUAAxkBAAEP0-NpIJZD3PhPH5RITkr21yD7cmlaaQAC4w8AAh7zWVcwgHF1OyOemjYE")
+            
+            chat_photo = config.START_IMG_URL
+            spoiler_needed = False
+                
+        except Exception as e:
+            print(f"Error: {e}")
+            chat_photo = config.START_IMG_URL
+            spoiler_needed = False
+            
         await lols.delete()
         await m.delete()
+        
+        PREMIUM_EMOJI_1 = "6120465303177533732" 
+        
+        # 2. ဒုတိယ Anime ကောင်မလေး (Streaming Exp ဘေးနား)
+        PREMIUM_EMOJI_2 = "6120591326107935086" 
+        
+        # 3. တတိယ Anime ကောင်မလေး (အောက်ဆုံး Button ဘေးနား)
+        PREMIUM_EMOJI_3 = "6120398056874582504"
+
+        # အစက်ကလေးများ (ID မလိုပါ၊ Unicode သုံးထားသည်)
+        # ID သုံးချင်ရင် <emoji id="xxx">🔴</emoji> လို့ပြင်ရေးပါ
+        
+        # စာသားပြင်ဆင်မှု (HTML Format)
+        START_TEXT = f"""
+<tg-emoji emoji-id='6205967094039709231'>😂</tg-emoji> ʜᴇʏ ʙᴀʙʏ : {message.from_user.mention} <emoji id="{PREMIUM_EMOJI_1}">🥺</emoji>
+<tg-emoji emoji-id='6206217069726271155'>😂</tg-emoji> ɪ ᴀᴍ {app.mention}, ʜᴇʀᴇ ᴛᴏ ᴘʀᴏᴠɪᴅᴇ ʏᴏᴜ ᴡɪᴛʜ ᴀ ꜱᴍᴏᴏᴛʜ ᴍᴜꜱɪᴄ ꜱᴛʀᴇᴀᴍɪɴɢ ᴇxᴘᴇʀɪᴇɴᴄᴇ <emoji id="{PREMIUM_EMOJI_2}">🤩</emoji>.
+
+<tg-emoji emoji-id='6204129896009042249'>😂</tg-emoji> ғᴇᴀᴛᴜʀᴇs
+<tg-emoji emoji-id='6206275004540126842'>😂</tg-emoji> ʜǫ ᴀᴜᴅɪᴏ : 320ᴋʙᴘs sᴛʀᴇᴀᴍɪɴɢ
+<tg-emoji emoji-id='6205967094039709231'>😂</tg-emoji> sᴛʀᴇᴀᴍ sᴜᴘᴘᴏʀᴛ : ᴀᴜᴅɪᴏ-ᴠɪᴅᴇᴏ
+<tg-emoji emoji-id='6206217069726271155'>😂</tg-emoji> 24-7 ᴜᴘᴛɪᴍᴇ : ᴇɴᴛᴇʀᴘʀɪsᴇ ʀᴇʟɪᴀʙɪʟɪᴛʏ
+<tg-emoji emoji-id='6204129896009042249'>😂</tg-emoji> ᴘʟᴀʏ ᴄᴏᴍᴍᴇɴᴛꜱ : ᴘʟᴀʏ, ᴠᴘʟᴀʏ 
+<tg-emoji emoji-id='6206275004540126842'>😂</tg-emoji> ʙᴀsᴇᴅ ᴏɴ : ʏᴏᴜᴛᴜʙᴇ ᴀᴘɪ
+
+<tg-emoji emoji-id='6205967094039709231'>😂</tg-emoji> ʏᴏᴜ ᴄᴀɴ ᴜꜱᴇ ᴍᴇ ʙʏ ᴄʟɪᴄᴋɪɴɢ ᴛʜᴇ ʙᴜᴛᴛᴏɴꜱ ʙᴇʟᴏᴡ <emoji id="{PREMIUM_EMOJI_3}">😙</emoji>."""
+
         await message.reply_photo(
             photo=chat_photo,
-            caption=_["start_2"].format(message.from_user.mention, app.mention),
+            caption=START_TEXT,
             reply_markup=InlineKeyboardMarkup(out),
+            has_spoiler=spoiler_needed,
+            parse_mode=ParseMode.HTML # ID အလုပ်လုပ်ရန် မဖြစ်မနေလိုအပ်သည်
         )
+        
         if await is_on_off(config.LOG):
             sender_id = message.from_user.id
             sender_name = message.from_user.first_name
@@ -158,6 +181,7 @@ async def start_pm(client, message: Message, _):
                 config.LOGGER_ID,
                 f"{message.from_user.mention} ʜᴀs sᴛᴀʀᴛᴇᴅ ʙᴏᴛ. \n\n**ᴜsᴇʀ ɪᴅ :** {sender_id}\n**ᴜsᴇʀ ɴᴀᴍᴇ:** {sender_name}",
             )
+
 
 @app.on_message(filters.command(["start"]) & filters.group & ~BANNED_USERS)
 @LanguageStart
