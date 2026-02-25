@@ -53,11 +53,11 @@ async def stream(
         u = str(u).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
         
         return (
-            f"<blockquote><emoji id='6325475529713522348'>📝</emoji> <b>စာရင်းထဲသို့ ထည့်သွင်းလိုက်ပါပြီ</b> |</blockquote>\n"
-            f"<blockquote><emoji id='6325320678962633780'>🎵</emoji> <b>ခေါင်းစဉ် :</b> {t[:27]}\n"
-            f"<emoji id='6325625905108490795'>⏱</emoji> <b>ကြာချိန် :</b> {d} ᴍɪɴᴜᴛᴇs\n"
+            f"<blockquote><emoji id='5895705279416241926'>📝</emoji> <b>စာရင်းထဲသို့ ထည့်သွင်းလိုက်ပါပြီ</b> |</blockquote>\n"
+            f"<blockquote><emoji id='5962964097904413958'>🎵</emoji> <b>ခေါင်းစဉ် :</b> {t[:27]}\n"
+            f"<emoji id='5960715046869798071'>⏱</emoji> <b>ကြာချိန် :</b> {d} ᴍɪɴᴜᴛᴇs\n"
             f"<emoji id='6325666711592769876'>👤</emoji> <b>တောင်းဆိုသူ :</b> {u}\n"
-            f"<emoji id='6325825028382267798'>🔢</emoji> <b>အမှတ်စဉ် :</b> {p}</blockquote>"
+            f"<emoji id='5960863197471706506'>🔢</emoji> <b>အမှတ်စဉ် :</b> {p}</blockquote>"
         )
     # -----------------------------------------------------------
 
