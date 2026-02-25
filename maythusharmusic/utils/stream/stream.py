@@ -3,7 +3,7 @@ from random import randint
 from typing import Union
 
 from pyrogram.types import InlineKeyboardMarkup
-
+from pyrogram.enums import ParseMode
 import config
 from maythusharmusic import Carbon, YouTube, app
 from maythusharmusic.core.call import Hotty
@@ -14,7 +14,7 @@ from maythusharmusic.utils.inline import aq_markup, close_markup, stream_markup
 from maythusharmusic.utils.pastebin import HottyBin
 from maythusharmusic.utils.stream.queue import put_queue, put_queue_index
 from maythusharmusic.utils.thumbnails import get_thumb
-
+import html
 
 async def stream(
     _,
