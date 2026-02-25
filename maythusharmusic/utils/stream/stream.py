@@ -3,6 +3,7 @@ from random import randint
 from typing import Union
 
 from pyrogram.types import InlineKeyboardMarkup
+from pyrogram.enums import ParseMode
 
 import config
 from maythusharmusic import Carbon, YouTube, app
@@ -34,22 +35,29 @@ async def stream(
     if forceplay:
         await Hotty.force_stop_stream(chat_id)
 
-    # 🟢 [PREMIUM EMOJI စာသား ဖွဲ့စည်းမှု - ဤနေရာတွင် ID များ ပြင်ဆင်ပါ] 🟢
+    # 🟢 [PREMIUM EMOJI - SAFE HTML ဖြင့် ပြင်ဆင်ချက်] 🟢
     def get_stream_text(t, d, u):
+        # ValueError မတက်စေရန် အထူးသင်္ကေတများကို ပြင်ဆင်ခြင်း
+        t = str(t).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+        u = str(u).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+        
         return (
-            f"<blockquote><emoji id='6120591326107935086'>🎧</emoji> <b>စတင်ထုတ်လွှင့်နေပြီ</b> |</blockquote>\n"
-            f"<blockquote><emoji id='6120591326107935086'>🎵</emoji> <b>ခေါင်းစဉ် :</b> {t[:27]}\n"
-            f"<emoji id='6120591326107935086'>⏱</emoji> <b>ကြာချိန် :</b> {d} ᴍɪɴᴜᴛᴇs\n"
-            f"<emoji id='6120591326107935086'>👤</emoji> <b>တောင်းဆိုသူ :</b> {u}</blockquote>"
+            f"<emoji id='6205967094039709231'>🎧</emoji> <b>စတင်ထုတ်လွှင့်နေပြီ</b> |\n\n"
+            f"<emoji id='6205967094039709231'>🎵</emoji> <b>ခေါင်းစဉ် :</b> {t[:27]}\n"
+            f"<emoji id='6205967094039709231'>⏱</emoji> <b>ကြာချိန် :</b> {d} ᴍɪɴᴜᴛᴇs\n"
+            f"<emoji id='6205967094039709231'>👤</emoji> <b>တောင်းဆိုသူ :</b> {u}"
         )
         
     def get_queue_text(t, d, u, p):
+        t = str(t).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+        u = str(u).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+        
         return (
-            f"<blockquote><emoji id='6120591326107935086'>📝</emoji> <b>စာရင်းထဲသို့ ထည့်သွင်းလိုက်ပါပြီ</b> |</blockquote>\n"
-            f"<blockquote><emoji id='6120591326107935086'>🎵</emoji> <b>ခေါင်းစဉ် :</b> {t[:27]}\n"
-            f"<emoji id='6120591326107935086'>⏱</emoji> <b>ကြာချိန် :</b> {d} ᴍɪɴᴜᴛᴇs\n"
-            f"<emoji id='6120591326107935086'>👤</emoji> <b>တောင်းဆိုသူ :</b> {u}\n"
-            f"<emoji id='6120591326107935086'>🔢</emoji> <b>အမှတ်စဉ် :</b> {p}</blockquote>"
+            f"<emoji id='6205967094039709231'>📝</emoji> <b>စာရင်းထဲသို့ ထည့်သွင်းလိုက်ပါပြီ</b> |\n\n"
+            f"<emoji id='6205967094039709231'>🎵</emoji> <b>ခေါင်းစဉ် :</b> {t[:27]}\n"
+            f"<emoji id='6205967094039709231'>⏱</emoji> <b>ကြာချိန် :</b> {d} ᴍɪɴᴜᴛᴇs\n"
+            f"<emoji id='6205967094039709231'>👤</emoji> <b>တောင်းဆိုသူ :</b> {u}\n"
+            f"<emoji id='6205967094039709231'>🔢</emoji> <b>အမှတ်စဉ် :</b> {p}"
         )
     # -----------------------------------------------------------
 
@@ -94,12 +102,10 @@ async def stream(
                     db[chat_id] = []
                 status = True if video else None
 
-                # --- START OF MODIFICATION (LOCATION 1) ---
                 try:
                     await mystic.edit_text(_["play_dl"].format(title))
                 except KeyError:
                     await mystic.edit_text(f"Dow͟n͟l͟o͟a͟d͟ ဆွဲနေပါသည် ● ᥫ᭡ {title}")
-                # --- END OF MODIFICATION ---
 
                 try:
                     file_path, direct = await YouTube.download(
@@ -133,7 +139,7 @@ async def stream(
                     photo=img,
                     caption=get_stream_text(title, duration_min, user_name),
                     reply_markup=InlineKeyboardMarkup(button),
-                    parse_mode="HTML",
+                    parse_mode=ParseMode.HTML,
                 )
                 db[chat_id][0]["mystic"] = run
                 db[chat_id][0]["markup"] = "stream"
@@ -167,12 +173,10 @@ async def stream(
         if current_queue is not None and len(current_queue) >= 50:
             return await app.send_message(original_chat_id, "You can't add more than 50 songs to the queue.")
 
-        # --- START OF MODIFICATION (LOCATION 2) ---
         try:
             await mystic.edit_text(_["play_dl"].format(title))
         except KeyError:
             await mystic.edit_text(f"Dow͟n͟l͟o͟a͟d͟ ဆွဲနေပါသည် ● ᥫ᭡ {title}")
-        # --- END OF MODIFICATION ---
 
         try:
             file_path, direct = await YouTube.download(
@@ -185,7 +189,7 @@ async def stream(
             await put_queue(
                 chat_id,
                 original_chat_id,
-                file_path,  # <-- (FAST JOIN ပြင်ဆင်မှု ၁)
+                file_path,  
                 title,
                 duration_min,
                 user_name,
@@ -199,7 +203,7 @@ async def stream(
                 chat_id=original_chat_id,
                 text=get_queue_text(title, duration_min, user_name, position),
                 reply_markup=InlineKeyboardMarkup(button),
-                parse_mode="HTML",
+                parse_mode=ParseMode.HTML,
             )
         else:
             if not forceplay:
@@ -214,7 +218,7 @@ async def stream(
             await put_queue(
                 chat_id,
                 original_chat_id,
-                file_path,  # <-- (FAST JOIN ပြင်ဆင်မှု ၂)
+                file_path, 
                 title,
                 duration_min,
                 user_name,
@@ -230,7 +234,7 @@ async def stream(
                 photo=img,
                 caption=get_stream_text(title, duration_min, user_name),
                 reply_markup=InlineKeyboardMarkup(button),
-                parse_mode="HTML",
+                parse_mode=ParseMode.HTML,
             )
             db[chat_id][0]["mystic"] = run
             db[chat_id][0]["markup"] = "stream"
@@ -256,7 +260,7 @@ async def stream(
                 chat_id=original_chat_id,
                 text=get_queue_text(title, duration_min, user_name, position),
                 reply_markup=InlineKeyboardMarkup(button),
-                parse_mode="HTML",
+                parse_mode=ParseMode.HTML,
             )
         else:
             if not forceplay:
@@ -280,7 +284,7 @@ async def stream(
                 photo=config.SOUNCLOUD_IMG_URL,
                 caption=get_stream_text(title, duration_min, user_name),
                 reply_markup=InlineKeyboardMarkup(button),
-                parse_mode="HTML",
+                parse_mode=ParseMode.HTML,
             )
             db[chat_id][0]["mystic"] = run
             db[chat_id][0]["markup"] = "tg"
@@ -308,7 +312,7 @@ async def stream(
                 chat_id=original_chat_id,
                 text=get_queue_text(title, duration_min, user_name, position),
                 reply_markup=InlineKeyboardMarkup(button),
-                parse_mode="HTML",
+                parse_mode=ParseMode.HTML,
             )
         else:
             if not forceplay:
@@ -334,7 +338,7 @@ async def stream(
                 photo=config.TELEGRAM_VIDEO_URL if video else config.TELEGRAM_AUDIO_URL,
                 caption=get_stream_text(title, duration_min, user_name),
                 reply_markup=InlineKeyboardMarkup(button),
-                parse_mode="HTML",
+                parse_mode=ParseMode.HTML,
             )
             db[chat_id][0]["mystic"] = run
             db[chat_id][0]["markup"] = "tg"
@@ -363,7 +367,7 @@ async def stream(
                 chat_id=original_chat_id,
                 text=get_queue_text(title, duration_min, user_name, position),
                 reply_markup=InlineKeyboardMarkup(button),
-                parse_mode="HTML",
+                parse_mode=ParseMode.HTML,
             )
         else:
             if not forceplay:
@@ -397,7 +401,7 @@ async def stream(
                 photo=img,
                 caption=get_stream_text(title, duration_min, user_name),
                 reply_markup=InlineKeyboardMarkup(button),
-                parse_mode="HTML",
+                parse_mode=ParseMode.HTML,
             )
             db[chat_id][0]["mystic"] = run
             db[chat_id][0]["markup"] = "tg"
@@ -421,7 +425,7 @@ async def stream(
             await mystic.edit_text(
                 text=get_queue_text(title, duration_min, user_name, position),
                 reply_markup=InlineKeyboardMarkup(button),
-                parse_mode="HTML",
+                parse_mode=ParseMode.HTML,
             )
         else:
             if not forceplay:
@@ -446,15 +450,15 @@ async def stream(
             button = stream_markup(_, chat_id)
             
             index_text = (
-                f"<blockquote><emoji id='6120591326107935086'>🎧</emoji> <b>စတင်ထုတ်လွှင့်နေပြီ (Index Stream)</b> |</blockquote>\n"
-                f"<blockquote><emoji id='6120591326107935086'>👤</emoji> <b>တောင်းဆိုသူ :</b> {user_name}</blockquote>"
+                f"<emoji id='6205967094039709231'>🎧</emoji> <b>စတင်ထုတ်လွှင့်နေပြီ (Index Stream)</b> |\n\n"
+                f"<emoji id='6205967094039709231'>👤</emoji> <b>တောင်းဆိုသူ :</b> {user_name}"
             )
             run = await app.send_photo(
                 original_chat_id,
                 photo=config.STREAM_IMG_URL,
                 caption=index_text,
                 reply_markup=InlineKeyboardMarkup(button),
-                parse_mode="HTML",
+                parse_mode=ParseMode.HTML,
             )
             db[chat_id][0]["mystic"] = run
             db[chat_id][0]["markup"] = "tg"
