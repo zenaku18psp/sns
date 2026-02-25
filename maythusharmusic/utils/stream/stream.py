@@ -1,10 +1,12 @@
+#stream.py
 import os
+import html  # <--- (1) HTML library ကို import လုပ်ရပါမည် (မဖြစ်မနေပါ)
 from random import randint
 from typing import Union
 
 from pyrogram.types import InlineKeyboardMarkup
 from pyrogram.enums import ParseMode
-import html 
+
 import config
 from maythusharmusic import Carbon, YouTube, app
 from maythusharmusic.core.call import Hotty
@@ -109,18 +111,21 @@ async def stream(
                 img = await get_thumb(vidid)
                 button = stream_markup(_, chat_id)
                 
-                # Stream 1 from YAML (with Emojis inside YAML)
+                # --- (2) HTML Escape (Title နှင့် Name ထဲက သင်္ကေတများကို ရှင်းထုတ်ခြင်း) ---
+                safe_title = html.escape(title)
+                safe_user_name = html.escape(user_name)
+
+                # Stream 1 from YAML
                 run = await app.send_photo(
                     original_chat_id,
                     photo=img,
                     caption=_["stream_1"].format(
                         f"https://t.me/{app.username}?start=info_{vidid}",
-                        title[:23],
+                        safe_title[:23], # safe_title ကိုသုံးပါ
                         duration_min,
-                        user_name,
+                        safe_user_name,  # safe_user_name ကိုသုံးပါ
                     ),
                     reply_markup=InlineKeyboardMarkup(button),
-                    parse_mode=ParseMode.HTML
                 )
                 db[chat_id][0]["mystic"] = run
                 db[chat_id][0]["markup"] = "stream"
@@ -185,7 +190,6 @@ async def stream(
                 chat_id=original_chat_id,
                 text=_["queue_4"].format(position, title[:27], duration_min, user_name),
                 reply_markup=InlineKeyboardMarkup(button),
-                parse_mode=ParseMode.HTML
             )
         else:
             if not forceplay:
@@ -212,18 +216,21 @@ async def stream(
             img = await get_thumb(vidid)
             button = stream_markup(_, chat_id)
             
+            # --- (2) HTML Escape ---
+            safe_title = html.escape(title)
+            safe_user_name = html.escape(user_name)
+
             # Stream 1 from YAML
             run = await app.send_photo(
                 original_chat_id,
                 photo=img,
                 caption=_["stream_1"].format(
                     f"https://t.me/{app.username}?start=info_{vidid}",
-                    title[:23],
+                    safe_title[:23],
                     duration_min,
-                    user_name,
+                    safe_user_name,
                 ),
                 reply_markup=InlineKeyboardMarkup(button),
-                parse_mode=ParseMode.HTML
             )
             db[chat_id][0]["mystic"] = run
             db[chat_id][0]["markup"] = "stream"
@@ -250,7 +257,6 @@ async def stream(
                 chat_id=original_chat_id,
                 text=_["queue_4"].format(position, title[:27], duration_min, user_name),
                 reply_markup=InlineKeyboardMarkup(button),
-                parse_mode=ParseMode.HTML
             )
         else:
             if not forceplay:
@@ -269,14 +275,18 @@ async def stream(
                 forceplay=forceplay,
             )
             button = stream_markup(_, chat_id)
+            
+            # --- HTML Escape ---
+            safe_title = html.escape(title)
+            safe_user_name = html.escape(user_name)
+
             run = await app.send_photo(
                 original_chat_id,
                 photo=config.SOUNCLOUD_IMG_URL,
                 caption=_["stream_1"].format(
-                    config.SUPPORT_GROUP, title[:23], duration_min, user_name
+                    config.SUPPORT_GROUP, safe_title[:23], duration_min, safe_user_name
                 ),
                 reply_markup=InlineKeyboardMarkup(button),
-                parse_mode=ParseMode.HTML
             )
             db[chat_id][0]["mystic"] = run
             db[chat_id][0]["markup"] = "tg"
@@ -305,7 +315,6 @@ async def stream(
                 chat_id=original_chat_id,
                 text=_["queue_4"].format(position, title[:27], duration_min, user_name),
                 reply_markup=InlineKeyboardMarkup(button),
-                parse_mode=ParseMode.HTML
             )
         else:
             if not forceplay:
@@ -326,12 +335,16 @@ async def stream(
             if video:
                 await add_active_video_chat(chat_id)
             button = stream_markup(_, chat_id)
+
+            # --- HTML Escape ---
+            safe_title = html.escape(title)
+            safe_user_name = html.escape(user_name)
+            
             run = await app.send_photo(
                 original_chat_id,
                 photo=config.TELEGRAM_VIDEO_URL if video else config.TELEGRAM_AUDIO_URL,
-                caption=_["stream_1"].format(link, title[:23], duration_min, user_name),
+                caption=_["stream_1"].format(link, safe_title[:23], duration_min, safe_user_name),
                 reply_markup=InlineKeyboardMarkup(button),
-                parse_mode=ParseMode.HTML
             )
             db[chat_id][0]["mystic"] = run
             db[chat_id][0]["markup"] = "tg"
@@ -361,7 +374,6 @@ async def stream(
                 chat_id=original_chat_id,
                 text=_["queue_4"].format(position, title[:27], duration_min, user_name),
                 reply_markup=InlineKeyboardMarkup(button),
-                parse_mode=ParseMode.HTML
             )
         else:
             if not forceplay:
@@ -391,18 +403,21 @@ async def stream(
             img = await get_thumb(vidid)
             button = stream_markup(_, chat_id)
             
+            # --- HTML Escape ---
+            safe_title = html.escape(title)
+            safe_user_name = html.escape(user_name)
+
             # Stream 1 from YAML
             run = await app.send_photo(
                 original_chat_id,
                 photo=img,
                 caption=_["stream_1"].format(
                     f"https://t.me/{app.username}?start=info_{vidid}",
-                    title[:23],
+                    safe_title[:23],
                     duration_min,
-                    user_name,
+                    safe_user_name,
                 ),
                 reply_markup=InlineKeyboardMarkup(button),
-                parse_mode=ParseMode.HTML
             )
             db[chat_id][0]["mystic"] = run
             db[chat_id][0]["markup"] = "tg"
@@ -427,7 +442,6 @@ async def stream(
             await mystic.edit_text(
                 text=_["queue_4"].format(position, title[:27], duration_min, user_name),
                 reply_markup=InlineKeyboardMarkup(button),
-                parse_mode=ParseMode.HTML
             )
         else:
             if not forceplay:
@@ -451,13 +465,15 @@ async def stream(
             )
             button = stream_markup(_, chat_id)
             
+            # --- HTML Escape ---
+            safe_user_name = html.escape(user_name)
+
             # Stream 2 (Live/Index) from YAML
             run = await app.send_photo(
                 original_chat_id,
                 photo=config.STREAM_IMG_URL,
-                caption=_["stream_2"].format(user_name),
+                caption=_["stream_2"].format(safe_user_name),
                 reply_markup=InlineKeyboardMarkup(button),
-                parse_mode=ParseMode.HTML
             )
             db[chat_id][0]["mystic"] = run
             db[chat_id][0]["markup"] = "tg"
