@@ -42,10 +42,10 @@ async def stream(
         u = str(u).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
         
         return (
-            f"<emoji id='6205967094039709231'>🎧</emoji> <b>စတင်ထုတ်လွှင့်နေပြီ</b> |\n\n"
-            f"<emoji id='6205967094039709231'>🎵</emoji> <b>ခေါင်းစဉ် :</b> {t[:27]}\n"
-            f"<emoji id='6205967094039709231'>⏱</emoji> <b>ကြာချိန် :</b> {d} ᴍɪɴᴜᴛᴇs\n"
-            f"<emoji id='6205967094039709231'>👤</emoji> <b>တောင်းဆိုသူ :</b> {u}"
+            f"<blockquote><emoji id='6120630771087579219'>🎧</emoji> <b>စတင်ထုတ်လွှင့်နေပြီ</b> |</blockquote>\n"
+            f"<blockquote><emoji id='6120465303177533732'>🎵</emoji> <b>ခေါင်းစဉ် :</b> {t[:27]}\n"
+            f"<emoji id='6120591326107935086'>⏱</emoji> <b>ကြာချိန် :</b> {d} ᴍɪɴᴜᴛᴇs\n"
+            f"<emoji id='6120398056874582504'>👤</emoji> <b>တောင်းဆိုသူ :</b> {u}</blockquote>"
         )
         
     def get_queue_text(t, d, u, p):
@@ -53,11 +53,11 @@ async def stream(
         u = str(u).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
         
         return (
-            f"<emoji id='6205967094039709231'>📝</emoji> <b>စာရင်းထဲသို့ ထည့်သွင်းလိုက်ပါပြီ</b> |\n\n"
-            f"<emoji id='6205967094039709231'>🎵</emoji> <b>ခေါင်းစဉ် :</b> {t[:27]}\n"
-            f"<emoji id='6205967094039709231'>⏱</emoji> <b>ကြာချိန် :</b> {d} ᴍɪɴᴜᴛᴇs\n"
-            f"<emoji id='6205967094039709231'>👤</emoji> <b>တောင်းဆိုသူ :</b> {u}\n"
-            f"<emoji id='6205967094039709231'>🔢</emoji> <b>အမှတ်စဉ် :</b> {p}"
+            f"<blockquote><emoji id='6325475529713522348'>📝</emoji> <b>စာရင်းထဲသို့ ထည့်သွင်းလိုက်ပါပြီ</b> |</blockquote>\n"
+            f"<blockquote><emoji id='6325320678962633780'>🎵</emoji> <b>ခေါင်းစဉ် :</b> {t[:27]}\n"
+            f"<emoji id='6325625905108490795'>⏱</emoji> <b>ကြာချိန် :</b> {d} ᴍɪɴᴜᴛᴇs\n"
+            f"<emoji id='6325666711592769876'>👤</emoji> <b>တောင်းဆိုသူ :</b> {u}\n"
+            f"<emoji id='6325825028382267798'>🔢</emoji> <b>အမှတ်စဉ် :</b> {p}</blockquote>"
         )
     # -----------------------------------------------------------
 
@@ -450,8 +450,8 @@ async def stream(
             button = stream_markup(_, chat_id)
             
             index_text = (
-                f"<emoji id='6205967094039709231'>🎧</emoji> <b>စတင်ထုတ်လွှင့်နေပြီ (Index Stream)</b> |\n\n"
-                f"<emoji id='6205967094039709231'>👤</emoji> <b>တောင်းဆိုသူ :</b> {user_name}"
+                f"<emoji id='6120465303177533732'>🎧</emoji> <b>စတင်ထုတ်လွှင့်နေပြီ (Index Stream)</b> |\n\n"
+                f"<emoji id='6120591326107935086'>👤</emoji> <b>တောင်းဆိုသူ :</b> {user_name}"
             )
             run = await app.send_photo(
                 original_chat_id,
