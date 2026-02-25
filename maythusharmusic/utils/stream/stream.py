@@ -1,6 +1,4 @@
-#stream.py
 import os
-import html  # <--- (1) HTML library ကို import လုပ်ရပါမည်
 from random import randint
 from typing import Union
 
@@ -36,28 +34,6 @@ async def stream(
         return
     if forceplay:
         await Hotty.force_stop_stream(chat_id)
-
-    # ==========================================
-    # 📌 CUSTOM MESSAGE TEMPLATES
-    # ==========================================
-    PREMIUM_EMOJI_1 = "6118554197349636961" 
-    PREMIUM_EMOJI_2 = "6120817245682669397" 
-    PREMIUM_EMOJI_3 = "6120789212431129604" 
-    PREMIUM_EMOJI_4 = "6120500195491848532" 
-
-    stream_msg_track = (
-        f"<emoji id='{PREMIUM_EMOJI_1}'>🥺</emoji> <b>စတင်ထုတ်လွှင့်နေပြီ</b>\n\n"
-        f"<emoji id='{PREMIUM_EMOJI_2}'>🥺</emoji> <b>ခေါင်းစဉ် :</b> <a href='{{link}}'>{{title}}</a>\n"
-        f"<emoji id='{PREMIUM_EMOJI_3}'>🥺</emoji> <b>ကြာချိန် :</b> {{duration}} မိနစ်\n"
-        f"<emoji id='{PREMIUM_EMOJI_4}'>🥺</emoji> <b>တောင်းဆိုသူ :</b> {{requester}}"
-    )
-
-    stream_msg_live = (
-        f"<emoji id='{PREMIUM_EMOJI_1}'>🥺</emoji> <b>စတင်ထုတ်လွှင့်နေပြီ</b>\n\n"
-        f"<emoji id='{PREMIUM_EMOJI_2}'>🥺</emoji> <b>Stream Type :</b> Live Stream\n"
-        f"<emoji id='{PREMIUM_EMOJI_4}'>🥺</emoji> <b>တောင်းဆိုသူ :</b> {{requester}}"
-    )
-    # ==========================================
 
     if streamtype == "playlist":
         msg = f"{_['play_19']}\n\n"
@@ -133,23 +109,17 @@ async def stream(
                 img = await get_thumb(vidid)
                 button = stream_markup(_, chat_id)
                 
-                # <--- (2) HTML Escape ပြုလုပ်ခြင်း (Safety)
-                safe_title = html.escape(title)
-                safe_user_name = html.escape(user_name)
-
-                caption_text = stream_msg_track.format(
-                    link=f"https://t.me/{app.username}?start=info_{vidid}",
-                    title=safe_title[:23],
-                    duration=duration_min,
-                    requester=safe_user_name
-                )
-
+                # Stream 1 from YAML (with Emojis inside YAML)
                 run = await app.send_photo(
                     original_chat_id,
                     photo=img,
-                    caption=caption_text,
+                    caption=_["stream_1"].format(
+                        f"https://t.me/{app.username}?start=info_{vidid}",
+                        title[:23],
+                        duration_min,
+                        user_name,
+                    ),
                     reply_markup=InlineKeyboardMarkup(button),
-                    parse_mode=ParseMode.HTML
                 )
                 db[chat_id][0]["mystic"] = run
                 db[chat_id][0]["markup"] = "stream"
@@ -170,6 +140,7 @@ async def stream(
                 caption=_["play_21"].format(position, link),
                 reply_markup=upl,
             )
+            
     elif streamtype == "youtube":
         link = result["link"]
         vidid = result["vidid"]
@@ -239,26 +210,21 @@ async def stream(
             img = await get_thumb(vidid)
             button = stream_markup(_, chat_id)
             
-            # <--- (2) HTML Escape ပြုလုပ်ခြင်း
-            safe_title = html.escape(title)
-            safe_user_name = html.escape(user_name)
-
-            caption_text = stream_msg_track.format(
-                link=f"https://t.me/{app.username}?start=info_{vidid}",
-                title=safe_title[:23],
-                duration=duration_min,
-                requester=safe_user_name
-            )
-
+            # Stream 1 from YAML
             run = await app.send_photo(
                 original_chat_id,
                 photo=img,
-                caption=caption_text,
+                caption=_["stream_1"].format(
+                    f"https://t.me/{app.username}?start=info_{vidid}",
+                    title[:23],
+                    duration_min,
+                    user_name,
+                ),
                 reply_markup=InlineKeyboardMarkup(button),
-                parse_mode=ParseMode.HTML
             )
             db[chat_id][0]["mystic"] = run
             db[chat_id][0]["markup"] = "stream"
+            
     elif streamtype == "soundcloud":
         file_path = result["filepath"]
         title = result["title"]
@@ -299,27 +265,17 @@ async def stream(
                 forceplay=forceplay,
             )
             button = stream_markup(_, chat_id)
-            
-            # <--- (2) HTML Escape
-            safe_title = html.escape(title)
-            safe_user_name = html.escape(user_name)
-            
-            caption_text = stream_msg_track.format(
-                link=config.SUPPORT_GROUP, 
-                title=safe_title[:23], 
-                duration=duration_min, 
-                requester=safe_user_name
-            )
-
             run = await app.send_photo(
                 original_chat_id,
                 photo=config.SOUNCLOUD_IMG_URL,
-                caption=caption_text,
+                caption=_["stream_1"].format(
+                    config.SUPPORT_GROUP, title[:23], duration_min, user_name
+                ),
                 reply_markup=InlineKeyboardMarkup(button),
-                parse_mode=ParseMode.HTML
             )
             db[chat_id][0]["mystic"] = run
             db[chat_id][0]["markup"] = "tg"
+            
     elif streamtype == "telegram":
         file_path = result["path"]
         link = result["link"]
@@ -364,27 +320,15 @@ async def stream(
             if video:
                 await add_active_video_chat(chat_id)
             button = stream_markup(_, chat_id)
-            
-            # <--- (2) HTML Escape
-            safe_title = html.escape(title)
-            safe_user_name = html.escape(user_name)
-
-            caption_text = stream_msg_track.format(
-                link=link, 
-                title=safe_title[:23], 
-                duration=duration_min, 
-                requester=safe_user_name
-            )
-
             run = await app.send_photo(
                 original_chat_id,
                 photo=config.TELEGRAM_VIDEO_URL if video else config.TELEGRAM_AUDIO_URL,
-                caption=caption_text,
+                caption=_["stream_1"].format(link, title[:23], duration_min, user_name),
                 reply_markup=InlineKeyboardMarkup(button),
-                parse_mode=ParseMode.HTML
             )
             db[chat_id][0]["mystic"] = run
             db[chat_id][0]["markup"] = "tg"
+            
     elif streamtype == "live":
         link = result["link"]
         vidid = result["vidid"]
@@ -439,26 +383,21 @@ async def stream(
             img = await get_thumb(vidid)
             button = stream_markup(_, chat_id)
             
-            # <--- (2) HTML Escape
-            safe_title = html.escape(title)
-            safe_user_name = html.escape(user_name)
-
-            caption_text = stream_msg_track.format(
-                link=f"https://t.me/{app.username}?start=info_{vidid}",
-                title=safe_title[:23],
-                duration=duration_min,
-                requester=safe_user_name
-            )
-
+            # Stream 1 from YAML
             run = await app.send_photo(
                 original_chat_id,
                 photo=img,
-                caption=caption_text,
+                caption=_["stream_1"].format(
+                    f"https://t.me/{app.username}?start=info_{vidid}",
+                    title[:23],
+                    duration_min,
+                    user_name,
+                ),
                 reply_markup=InlineKeyboardMarkup(button),
-                parse_mode=ParseMode.HTML
             )
             db[chat_id][0]["mystic"] = run
             db[chat_id][0]["markup"] = "tg"
+            
     elif streamtype == "index":
         link = result
         title = "ɪɴᴅᴇx ᴏʀ ᴍ3ᴜ8 ʟɪɴᴋ"
@@ -502,19 +441,12 @@ async def stream(
             )
             button = stream_markup(_, chat_id)
             
-            # <--- (2) HTML Escape
-            safe_user_name = html.escape(user_name)
-
-            caption_text = stream_msg_live.format(
-                requester=safe_user_name
-            )
-
+            # Stream 2 (Live/Index) from YAML
             run = await app.send_photo(
                 original_chat_id,
                 photo=config.STREAM_IMG_URL,
-                caption=caption_text,
+                caption=_["stream_2"].format(user_name),
                 reply_markup=InlineKeyboardMarkup(button),
-                parse_mode=ParseMode.HTML
             )
             db[chat_id][0]["mystic"] = run
             db[chat_id][0]["markup"] = "tg"
