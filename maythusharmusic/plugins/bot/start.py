@@ -86,8 +86,6 @@ async def start_pm(client, message: Message, _):
                     text=f"{message.from_user.mention} ᴊᴜsᴛ sᴛᴀʀᴛᴇᴅ ᴛʜᴇ ʙᴏᴛ ᴛᴏ ᴄʜᴇᴄᴋ <b>ᴛʀᴀᴄᴋ ɪɴғᴏʀᴍᴀᴛɪᴏɴ</b>.\n\n<b>ᴜsᴇʀ ɪᴅ :</b> <code>{message.from_user.id}</code>\n<b>ᴜsᴇʀɴᴀᴍᴇ :</b> @{message.from_user.username}",
                 )
     else:
-        lols = None
-        m = None
         try:
             out = private_panel(_)
             lol = await message.reply_text("**ω ᥫ᭡**")
@@ -109,7 +107,7 @@ async def start_pm(client, message: Message, _):
             await lol.edit_text("**ωєℓᴄᴏᴍᴇ вαв ᥫ᭡**")
             await asyncio.sleep(0.1)
             await lol.edit_text("**ωєℓᴄᴏᴍᴇ вαву ᥫ᭡**")
-            
+          
             await lol.delete()
             lols = await message.reply_text("**⚡️ѕ**")
             await asyncio.sleep(0.1)
@@ -140,17 +138,8 @@ async def start_pm(client, message: Message, _):
             chat_photo = config.START_IMG_URL
             spoiler_needed = False
             
-        # Error တက်ခဲ့သည်ဖြစ်စေ၊ မတက်ခဲ့သည်ဖြစ်စေ lols နှင့် m ရှိမှသာ ဖျက်မည်
-        if lols:
-            try:
-                await lols.delete()
-            except:
-                pass
-        if m:
-            try:
-                await m.delete()
-            except:
-                pass
+        await lols.delete()
+        await m.delete()
         
         PREMIUM_EMOJI_1 = "6120465303177533732" 
         
@@ -185,16 +174,13 @@ async def start_pm(client, message: Message, _):
 
 <emoji id="{PREMIUM_EMOJI_4}">😂</emoji> ʏᴏᴜ ᴄᴀɴ ᴜꜱᴇ ᴍᴇ ʙʏ ᴄʟɪᴄᴋɪɴɢ ᴛʜᴇ ʙᴜᴛᴛᴏɴꜱ ʙᴇʟᴏᴡ <emoji id="{PREMIUM_EMOJI_3}">😙</emoji>."""
 
-        try:
-            await message.reply_photo(
-                photo=chat_photo,
-                caption=START_TEXT,
-                reply_markup=InlineKeyboardMarkup(out),
-                has_spoiler=spoiler_needed,
-                parse_mode=ParseMode.HTML # ID အလုပ်လုပ်ရန် မဖြစ်မနေလိုအပ်သည်
-            )
-        except Exception as e:
-            print(f"Reply Photo Error: {e}")
+        await message.reply_photo(
+            photo=chat_photo,
+            caption=START_TEXT,
+            reply_markup=InlineKeyboardMarkup(out),
+            has_spoiler=spoiler_needed,
+            parse_mode=ParseMode.HTML # ID အလုပ်လုပ်ရန် မဖြစ်မနေလိုအပ်သည်
+        )
         
         if await is_on_off(config.LOG):
             sender_id = message.from_user.id
