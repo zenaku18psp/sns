@@ -3,7 +3,7 @@ from random import randint
 from typing import Union
 
 from pyrogram.types import InlineKeyboardMarkup
-from pyrogram.enums import ParseMode
+
 import config
 from maythusharmusic import Carbon, YouTube, app
 from maythusharmusic.core.call import Hotty
@@ -14,7 +14,7 @@ from maythusharmusic.utils.inline import aq_markup, close_markup, stream_markup
 from maythusharmusic.utils.pastebin import HottyBin
 from maythusharmusic.utils.stream.queue import put_queue, put_queue_index
 from maythusharmusic.utils.thumbnails import get_thumb
-import html
+
 
 async def stream(
     _,
@@ -37,19 +37,19 @@ async def stream(
     # 🟢 [PREMIUM EMOJI စာသား ဖွဲ့စည်းမှု - ဤနေရာတွင် ID များ ပြင်ဆင်ပါ] 🟢
     def get_stream_text(t, d, u):
         return (
-            f"<blockquote><emoji id='6120591326107935086'>🎧</emoji> <b>စတင်ထုတ်လွှင့်နေပြီ</b> |</blockquote>\n"
-            f"<blockquote><emoji id='6120591326107935086'>🎵</emoji> <b>ခေါင်းစဉ် :</b> {t[:27]}\n"
-            f"<emoji id='6120591326107935086'>⏱</emoji> <b>ကြာချိန် :</b> {d} ᴍɪɴᴜᴛᴇs\n"
-            f"<emoji id='6120591326107935086'>👤</emoji> <b>တောင်းဆိုသူ :</b> {u}</blockquote>"
+            f"<blockquote><emoji id='5427009714745061633'>🎧</emoji> <b>စတင်ထုတ်လွှင့်နေပြီ</b> |</blockquote>\n"
+            f"<blockquote><emoji id='5451234567890123456'>🎵</emoji> <b>ခေါင်းစဉ် :</b> {t[:27]}\n"
+            f"<emoji id='5401234567890123456'>⏱</emoji> <b>ကြာချိန် :</b> {d} ᴍɪɴᴜᴛᴇs\n"
+            f"<emoji id='5411111111111111111'>👤</emoji> <b>တောင်းဆိုသူ :</b> {u}</blockquote>"
         )
         
     def get_queue_text(t, d, u, p):
         return (
-            f"<blockquote><emoji id='6120591326107935086'>📝</emoji> <b>စာရင်းထဲသို့ ထည့်သွင်းလိုက်ပါပြီ</b> |</blockquote>\n"
-            f"<blockquote><emoji id='6120591326107935086'>🎵</emoji> <b>ခေါင်းစဉ် :</b> {t[:27]}\n"
-            f"<emoji id='6120591326107935086'>⏱</emoji> <b>ကြာချိန် :</b> {d} ᴍɪɴᴜᴛᴇs\n"
-            f"<emoji id='6120591326107935086'>👤</emoji> <b>တောင်းဆိုသူ :</b> {u}\n"
-            f"<emoji id='6120591326107935086'>🔢</emoji> <b>အမှတ်စဉ် :</b> {p}</blockquote>"
+            f"<blockquote><emoji id='5427009714745061633'>📝</emoji> <b>စာရင်းထဲသို့ ထည့်သွင်းလိုက်ပါပြီ</b> |</blockquote>\n"
+            f"<blockquote><emoji id='5451234567890123456'>🎵</emoji> <b>ခေါင်းစဉ် :</b> {t[:27]}\n"
+            f"<emoji id='5401234567890123456'>⏱</emoji> <b>ကြာချိန် :</b> {d} ᴍɪɴᴜᴛᴇs\n"
+            f"<emoji id='5411111111111111111'>👤</emoji> <b>တောင်းဆိုသူ :</b> {u}\n"
+            f"<emoji id='5373141890123456789'>🔢</emoji> <b>အမှတ်စဉ် :</b> {p}</blockquote>"
         )
     # -----------------------------------------------------------
 
@@ -446,8 +446,8 @@ async def stream(
             button = stream_markup(_, chat_id)
             
             index_text = (
-                f"<blockquote><emoji id='6120591326107935086'>🎧</emoji> <b>စတင်ထုတ်လွှင့်နေပြီ (Index Stream)</b> |</blockquote>\n"
-                f"<blockquote><emoji id='6120591326107935086'>👤</emoji> <b>တောင်းဆိုသူ :</b> {user_name}</blockquote>"
+                f"<blockquote><emoji id='5427009714745061633'>🎧</emoji> <b>စတင်ထုတ်လွှင့်နေပြီ (Index Stream)</b> |</blockquote>\n"
+                f"<blockquote><emoji id='5411111111111111111'>👤</emoji> <b>တောင်းဆိုသူ :</b> {user_name}</blockquote>"
             )
             run = await app.send_photo(
                 original_chat_id,
