@@ -1,5 +1,4 @@
-from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
-
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from config import SUPPORT_CHAT
 
 
@@ -10,31 +9,28 @@ def botplaylist_markup(_):
             InlineKeyboardButton(text=_["CLOSE_BUTTON"], callback_data="close"),
         ],
     ]
-    return buttons
+    return InlineKeyboardMarkup(inline_keyboard=buttons)
 
 
 def close_markup(_):
-    upl = InlineKeyboardMarkup(
+    buttons = [
         [
-            [
-                InlineKeyboardButton(
-                    text=_["CLOSE_BUTTON"],
-                    callback_data="close",
-                ),
-            ]
+            InlineKeyboardButton(
+                text=_["CLOSE_BUTTON"],
+                callback_data="close",
+            ),
         ]
-    )
-    return upl
+    ]
+    return InlineKeyboardMarkup(inline_keyboard=buttons)
+
 
 def supp_markup(_):
-    upl = InlineKeyboardMarkup(
+    buttons = [
         [
-            [
-                InlineKeyboardButton(
-                    text=_["S_B_9"],
-                    url=SUPPORT_CHAT,
-                ),
-            ]
+            InlineKeyboardButton(
+                text=_["S_B_9"],
+                url=SUPPORT_CHAT,
+            ),
         ]
-    )
-    return upl
+    ]
+    return InlineKeyboardMarkup(inline_keyboard=buttons)
