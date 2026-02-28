@@ -1,7 +1,5 @@
 import math
-
-from pyrogram.types import InlineKeyboardButton
-
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from maythusharmusic.utils.formatters import time_to_seconds
 
 
@@ -24,7 +22,7 @@ def track_markup(_, videoid, user_id, channel, fplay):
             )
         ],
     ]
-    return buttons
+    return InlineKeyboardMarkup(inline_keyboard=buttons)
 
 
 def stream_markup_timer(_, chat_id, played, dur):
@@ -32,6 +30,7 @@ def stream_markup_timer(_, chat_id, played, dur):
     duration_sec = time_to_seconds(dur)
     percentage = (played_sec / duration_sec) * 100
     umm = math.floor(percentage)
+    
     if 0 < umm <= 10:
         bar = "◉—————————"
     elif 10 < umm < 20:
@@ -52,6 +51,7 @@ def stream_markup_timer(_, chat_id, played, dur):
         bar = "————————◉—"
     else:
         bar = "—————————◉"
+    
     buttons = [
         [
             InlineKeyboardButton(text="▷", callback_data=f"ADMIN Resume|{chat_id}"),
@@ -72,7 +72,8 @@ def stream_markup_timer(_, chat_id, played, dur):
         ],
         [InlineKeyboardButton(text="စကားပြော", url="https://t.me/Myanmar_2002")],
     ]
-    return buttons
+    return InlineKeyboardMarkup(inline_keyboard=buttons)
+
 
 def stream_markup(_, chat_id):
     buttons = [
@@ -89,7 +90,7 @@ def stream_markup(_, chat_id):
         ],
         [InlineKeyboardButton(text="စကားပြော", url="https://t.me/Myanmar_2002")],
     ]
-    return buttons
+    return InlineKeyboardMarkup(inline_keyboard=buttons)
 
 
 def playlist_markup(_, videoid, user_id, ptype, channel, fplay):
@@ -111,7 +112,7 @@ def playlist_markup(_, videoid, user_id, ptype, channel, fplay):
             ),
         ],
     ]
-    return buttons
+    return InlineKeyboardMarkup(inline_keyboard=buttons)
 
 
 def livestream_markup(_, videoid, user_id, mode, channel, fplay):
@@ -129,7 +130,7 @@ def livestream_markup(_, videoid, user_id, mode, channel, fplay):
             ),
         ],
     ]
-    return buttons
+    return InlineKeyboardMarkup(inline_keyboard=buttons)
 
 
 def slider_markup(_, videoid, user_id, query, query_type, channel, fplay):
@@ -160,4 +161,4 @@ def slider_markup(_, videoid, user_id, query, query_type, channel, fplay):
             ),
         ],
     ]
-    return buttons
+    return InlineKeyboardMarkup(inline_keyboard=buttons)
