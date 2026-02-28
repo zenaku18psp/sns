@@ -177,10 +177,10 @@ async def start_pm(client, message: Message, _):
         await message.reply_photo(
             photo=chat_photo,
             caption=START_TEXT,
-            reply_markup=InlineKeyboardMarkup(out),
+            reply_markup=out,  # ✅ InlineKeyboardMarkup မထည့်ပါနဲ့
             has_spoiler=spoiler_needed,
-            parse_mode=ParseMode.HTML # ID အလုပ်လုပ်ရန် မဖြစ်မနေလိုအပ်သည်
-        )
+            parse_mode=ParseMode.HTML
+         )
         
         if await is_on_off(config.LOG):
             sender_id = message.from_user.id
