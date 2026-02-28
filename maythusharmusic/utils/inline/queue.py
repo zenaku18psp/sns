@@ -1,6 +1,5 @@
 from typing import Union
-
-from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 
 def queue_markup(
@@ -23,7 +22,7 @@ def queue_markup(
             ),
         ]
     ]
-    dur = [
+    dur_buttons = [
         [
             InlineKeyboardButton(
                 text=_["QU_B_2"].format(played, dur),
@@ -41,35 +40,35 @@ def queue_markup(
             ),
         ],
     ]
-    upl = InlineKeyboardMarkup(not_dur if DURATION == "Unknown" else dur)
-    return upl
+    
+    # Choose which button set to use based on DURATION
+    buttons = not_dur if DURATION == "Unknown" else dur_buttons
+    return InlineKeyboardMarkup(inline_keyboard=buttons)
 
 
 def queue_back_markup(_, CPLAY):
-    upl = InlineKeyboardMarkup(
+    buttons = [
         [
-            [
-                InlineKeyboardButton(
-                    text=_["BACK_BUTTON"],
-                    callback_data=f"queue_back_timer {CPLAY}",
-                ),
-                InlineKeyboardButton(
-                    text=_["CLOSE_BUTTON"],
-                    callback_data="close",
-                ),
-            ]
+            InlineKeyboardButton(
+                text=_["BACK_BUTTON"],
+                callback_data=f"queue_back_timer {CPLAY}",
+            ),
+            InlineKeyboardButton(
+                text=_["CLOSE_BUTTON"],
+                callback_data="close",
+            ),
         ]
-    )
-    return upl
+    ]
+    return InlineKeyboardMarkup(inline_keyboard=buttons)
 
 
 def aq_markup(_, chat_id):
     buttons = [
         [
             InlineKeyboardButton(
-                    text=_["CLOSE_BUTTON"],
-                    callback_data="close",
+                text=_["CLOSE_BUTTON"],
+                callback_data="close",
             ),
         ],
     ]
-    return buttons
+    return InlineKeyboardMarkup(inline_keyboard=buttons)
