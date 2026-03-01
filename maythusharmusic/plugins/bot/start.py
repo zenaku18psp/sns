@@ -177,7 +177,7 @@ async def start_pm(client, message: Message, _):
         await message.reply_photo(
             photo=chat_photo,
             caption=START_TEXT,
-            reply_markup=out,  # ✅ InlineKeyboardMarkup မထည့်ပါနဲ့
+            reply_markup=InlineKeyboardMarkup(out),
             has_spoiler=spoiler_needed,
             parse_mode=ParseMode.HTML
          )
