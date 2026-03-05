@@ -1,9 +1,11 @@
+# -*- coding: utf-8 -*-
 import asyncio
 import os
 from datetime import datetime, timedelta
 from typing import Union
 
 from pyrogram import Client
+from pyrogram.enums import ParseMode
 from pyrogram.types import InlineKeyboardMarkup
 from ntgcalls import TelegramServerError
 from pytgcalls import PyTgCalls
@@ -418,17 +420,27 @@ class Call(PyTgCalls):
                         text=_["call_6"],
                     )
                 img = await get_thumb(videoid)
-                button = stream_markup2(_, chat_id)
+                button = stream_markup(_, chat_id)
+                
+                # 🟢 HTML FORMAT ဖြင့် ပြင်ဆင်ထားသော အပိုင်း
+                EMOJI_2 = "6131758159473156126"
+                EMOJI_4 = "6300622254778616022"
+                EMOJI_5 = "6300757202651055745"
+                EMOJI_6 = "6300853298249336390"
+
+                stream_text = f"""
+<emoji id="{EMOJI_4}">🔴</emoji> <b>Sᴛʀᴇᴀᴍɪɴɢ ꜱᴛᴀʀᴛᴇᴅ</b> <emoji id="{EMOJI_2}">🤩</emoji>
+
+<emoji id="{EMOJI_5}">🟢</emoji> <b>Tɪᴛʟᴇ:</b> <a href='https://t.me/{app.username}?start=info_{videoid}'>{title[:23]}</a>
+<emoji id="{EMOJI_6}">🟡</emoji> <b>Dᴜʀᴀᴛɪᴏɴ:</b> {check[0]["dur"]}
+<emoji id="{EMOJI_5}">🟢</emoji> <b>Rᴇǫᴜᴇsᴛᴇᴅ:</b> {user}
+"""
                 run = await app.send_photo(
                     chat_id=original_chat_id,
                     photo=img,
-                    caption=_["stream_1"].format(
-                        f"https://t.me/{app.username}?start=info_{videoid}",
-                        title[:23],
-                        check[0]["dur"],
-                        user,
-                    ),
+                    caption=stream_text,
                     reply_markup=InlineKeyboardMarkup(button),
+                    parse_mode=ParseMode.HTML
                 )
                 db[chat_id][0]["mystic"] = run
                 db[chat_id][0]["markup"] = "tg"
@@ -465,18 +477,28 @@ class Call(PyTgCalls):
                         text=_["call_6"],
                     )
                 img = await get_thumb(videoid)
-                button = stream_markup(_, videoid, chat_id)
+                button = stream_markup(_, videoid)
                 await mystic.delete()
+                
+                # 🟢 HTML FORMAT ဖြင့် ပြင်ဆင်ထားသော အပိုင်း
+                EMOJI_2 = "6131758159473156126"
+                EMOJI_4 = "6300622254778616022"
+                EMOJI_5 = "6300757202651055745"
+                EMOJI_6 = "6300853298249336390"
+
+                stream_text = f"""
+<emoji id="{EMOJI_4}">🔴</emoji> <b>Sᴛʀᴇᴀᴍɪɴɢ ꜱᴛᴀʀᴛᴇᴅ</b> <emoji id="{EMOJI_2}">🤩</emoji>
+
+<emoji id="{EMOJI_5}">🟢</emoji> <b>Tɪᴛʟᴇ:</b> <a href='https://t.me/{app.username}?start=info_{videoid}'>{title[:23]}</a>
+<emoji id="{EMOJI_6}">🟡</emoji> <b>Dᴜʀᴀᴛɪᴏɴ:</b> {check[0]["dur"]}
+<emoji id="{EMOJI_5}">🟢</emoji> <b>Rᴇǫᴜᴇsᴛᴇᴅ:</b> {user}
+"""
                 run = await app.send_photo(
                     chat_id=original_chat_id,
                     photo=img,
-                    caption=_["stream_1"].format(
-                        f"https://t.me/{app.username}?start=info_{videoid}",
-                        title[:23],
-                        check[0]["dur"],
-                        user,
-                    ),
+                    caption=stream_text,
                     reply_markup=InlineKeyboardMarkup(button),
+                    parse_mode=ParseMode.HTML
                 )
                 db[chat_id][0]["mystic"] = run
                 db[chat_id][0]["markup"] = "stream"
@@ -501,7 +523,7 @@ class Call(PyTgCalls):
                         original_chat_id,
                         text=_["call_6"],
                     )
-                button = stream_markup2(_, chat_id)
+                button = stream_markup(_, chat_id)
                 run = await app.send_photo(
                     chat_id=original_chat_id,
                     photo=config.STREAM_IMG_URL,
@@ -530,8 +552,23 @@ class Call(PyTgCalls):
                         original_chat_id,
                         text=_["call_6"],
                     )
+                
+                # 🟢 HTML FORMAT ဖြင့် ပြင်ဆင်ထားသော အပိုင်း
+                EMOJI_2 = "6131758159473156126"
+                EMOJI_4 = "6300622254778616022"
+                EMOJI_5 = "6300757202651055745"
+                EMOJI_6 = "6300853298249336390"
+
+                stream_text = f"""
+<emoji id="{EMOJI_4}">🔴</emoji> <b>Sᴛʀᴇᴀᴍɪɴɢ ꜱᴛᴀʀᴛᴇᴅ</b> <emoji id="{EMOJI_2}">🤩</emoji>
+
+<emoji id="{EMOJI_5}">🟢</emoji> <b>Tɪᴛʟᴇ:</b> <a href='https://t.me/{app.username}?start=info_{videoid}'>{title[:23]}</a>
+<emoji id="{EMOJI_6}">🟡</emoji> <b>Dᴜʀᴀᴛɪᴏɴ:</b> {check[0]["dur"]}
+<emoji id="{EMOJI_5}">🟢</emoji> <b>Rᴇǫᴜᴇsᴛᴇᴅ:</b> {user}
+"""
+
                 if videoid == "telegram":
-                    button = stream_markup2(_, chat_id)
+                    button = stream_markup(_, chat_id)
                     run = await app.send_photo(
                         chat_id=original_chat_id,
                         photo=(
@@ -539,38 +576,32 @@ class Call(PyTgCalls):
                             if str(streamtype) == "audio"
                             else config.TELEGRAM_VIDEO_URL
                         ),
-                        caption=_["stream_1"].format(
-                            config.SUPPORT_CHAT, title[:23], check[0]["dur"], user
-                        ),
+                        caption=stream_text,
                         reply_markup=InlineKeyboardMarkup(button),
+                        parse_mode=ParseMode.HTML
                     )
                     db[chat_id][0]["mystic"] = run
                     db[chat_id][0]["markup"] = "tg"
                 elif videoid == "soundcloud":
-                    button = stream_markup2(_, chat_id)
+                    button = stream_markup(_, chat_id)
                     run = await app.send_photo(
                         chat_id=original_chat_id,
                         photo=config.SOUNCLOUD_IMG_URL,
-                        caption=_["stream_1"].format(
-                            config.SUPPORT_CHAT, title[:23], check[0]["dur"], user
-                        ),
+                        caption=stream_text,
                         reply_markup=InlineKeyboardMarkup(button),
+                        parse_mode=ParseMode.HTML
                     )
                     db[chat_id][0]["mystic"] = run
                     db[chat_id][0]["markup"] = "tg"
                 else:
                     img = await get_thumb(videoid)
-                    button = stream_markup(_, videoid, chat_id)
+                    button = stream_markup(_, videoid)
                     run = await app.send_photo(
                         chat_id=original_chat_id,
                         photo=img,
-                        caption=_["stream_1"].format(
-                            f"https://t.me/{app.username}?start=info_{videoid}",
-                            title[:23],
-                            check[0]["dur"],
-                            user,
-                        ),
+                        caption=stream_text,
                         reply_markup=InlineKeyboardMarkup(button),
+                        parse_mode=ParseMode.HTML
                     )
                     db[chat_id][0]["mystic"] = run
                     db[chat_id][0]["markup"] = "stream"
